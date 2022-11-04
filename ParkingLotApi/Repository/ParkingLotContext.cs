@@ -8,5 +8,10 @@ namespace ParkingLotApi.Repository
             : base(options)
         {
         }
+        public DbSet<ParkinglotEntity> Parkinglot
+        {
+            get;
+            set;
+        }
     }
 }
