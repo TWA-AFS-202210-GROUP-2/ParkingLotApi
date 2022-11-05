@@ -1,7 +1,7 @@
-﻿using ParkingLotApi.Models;
+﻿using ParkingLotApi.Model;
 using System;
 
-namespace ParkingLotApi.Dtos
+namespace ParkingLotApi.Dto
 {
     public class OrderDto
     {

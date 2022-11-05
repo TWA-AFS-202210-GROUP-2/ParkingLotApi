@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ParkingLotApi.Models
+namespace ParkingLotApi.Model
 {
     public class ParkingLotEntity
     {

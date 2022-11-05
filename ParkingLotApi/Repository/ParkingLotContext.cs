@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ParkingLotApi.Models;
+using ParkingLotApi.Model;
 
 namespace ParkingLotApi.Repository
 {

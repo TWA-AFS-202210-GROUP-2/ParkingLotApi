@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ParkingLotApi.Models
+namespace ParkingLotApi.Model
 {
     public class OrderEntity
     {
