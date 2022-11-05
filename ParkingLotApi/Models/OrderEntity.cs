@@ -10,11 +10,11 @@ namespace ParkingLotApi.Models
 
         public string PlateNumber { get; set; }
 
-        public DateTime CreationTime { get; set; }
+        public string CreationTime { get; set; } = DateTime.Now.ToString();
 
-        public DateTime? CloseTime { get; set; }
+        public string? CloseTime { get; set; }
 
-        public OrderStatus IsClose { get; set; } = OrderStatus.Open;
+        public bool IsClose { get; set; } = true;
     }
 
     public enum OrderStatus
