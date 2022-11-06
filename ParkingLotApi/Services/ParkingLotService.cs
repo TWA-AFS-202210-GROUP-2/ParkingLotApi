@@ -87,6 +87,18 @@ namespace ParkingLotApi.Services
             var foundParkingLot = parkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
             return foundParkingLot.Orders.Select(orderEntity => new OrderDto(orderEntity)).ToList();
         }
+
+        public async Task<OrderDto> UpdateOrder(OrderDto orderDto, int id, string plateNumber)
+        {
+            var parkingLots = await parkingLotContext.ParkingLots.
+                Include(parklot => parklot.Orders).ToListAsync();
+            var foundParkingLot = parkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            var foundOrder = foundParkingLot?.Orders.FirstOrDefault(order => order.PlateNumber == plateNumber);
+            foundOrder.ClosedTime = orderDto.ClosedTime;
+            foundOrder.OrderStatus=orderDto.OrderStatus;
+            await parkingLotContext.SaveChangesAsync();
+            return orderDto;
+        }
     }
 
 }

@@ -85,4 +85,11 @@ public class ParkingLotController : ControllerBase
         var getOrderDtos = await parkingLotService.GetOrder(id);
         return Ok(getOrderDtos);
     }
+
+    [HttpPut("{id}/orders")]
+    public async Task<ActionResult<OrderDto>> UpdateOrder(OrderDto orderDto, [FromRoute] int id, [FromQuery] string plateNumber)
+    {
+        var updateOrderDto = await parkingLotService.UpdateOrder(orderDto,id,plateNumber);
+        return Ok(updateOrderDto);
+    }
 }
