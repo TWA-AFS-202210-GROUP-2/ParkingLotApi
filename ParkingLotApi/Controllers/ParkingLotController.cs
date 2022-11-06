@@ -75,6 +75,10 @@ public class ParkingLotController : ControllerBase
     public async Task<ActionResult<OrderDto>> AddOrderToParkingLot(OrderDto orderDto, [FromRoute] int id)
     {
         var orderId = await parkingLotService.AddOrder(orderDto, id);
+        if(orderId == -1)
+        {
+            return BadRequest("The parking lot is full");
+        }
         return Created("{id}/orders",orderDto);
         /*return CreatedAtAction(nameof(GetOrderById), new { orderId = orderId }, orderDto);*/
     }

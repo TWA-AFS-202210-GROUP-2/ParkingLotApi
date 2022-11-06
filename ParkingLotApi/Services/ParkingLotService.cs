@@ -70,6 +70,11 @@ namespace ParkingLotApi.Services
             var parkingLots= await parkingLotContext.ParkingLots.
                 Include(parklot => parklot.Orders).ToListAsync();
             var foundParkingLot = parkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            var openCount = foundParkingLot.Orders?.Where(order => order.OrderStatus == "open").Count();
+            if(foundParkingLot.Capcity == openCount)
+            {
+                return -1;
+            }
             if(foundParkingLot.Orders == null)
             {
                 foundParkingLot.Orders = new List<OrderEntity>();
