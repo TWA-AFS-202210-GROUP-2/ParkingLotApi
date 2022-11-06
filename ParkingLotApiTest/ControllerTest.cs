@@ -86,6 +86,7 @@ namespace ParkingLotApiTest
             Assert.Equal(12, plGetPatch.Capacity);
         }
 
+        [Fact]
         public async void Should_new_a_order_when_create_given_parkinglot()
         {
             // given : a parking lot
@@ -97,12 +98,18 @@ namespace ParkingLotApiTest
             plIdbody.EnsureSuccessStatusCode();
             var body = await plIdbody.Content.ReadAsStringAsync();
             var id = JsonConvert.DeserializeObject<int>(body);
-            var order = pl.Orders.FirstOrDefault().PlateNumber = "BB";
+            var order = pl.Orders.FirstOrDefault();
 
-            new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
+            // when 
+            postBody = new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
+            var orderIdbody = await client.PostAsync($"parkinglots/{id}/orders", postBody);
+            plIdbody.EnsureSuccessStatusCode();
 
+            // then
+            var plGetBody = await client.GetAsync($"parkinglots/{id}");
+            var plGet = JsonConvert.DeserializeObject<ParkingLotEntity>(await plGetBody.Content.ReadAsStringAsync());
 
-            Assert.Equal(pl.Name, _parkingLotContext.ParkingLots.Where(_ => _.Id == id).FirstOrDefault().Name);
+            Assert.Equal(3, plGet.Orders.Count);
         }
 
 
