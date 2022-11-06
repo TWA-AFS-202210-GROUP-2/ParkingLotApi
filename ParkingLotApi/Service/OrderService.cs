@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ParkingLotApi.Dtos;
@@ -20,5 +21,14 @@ public class OrderService
         parkingLotEntity.Orders.Add(orderDto.ToEntity(parkingLotEntity.Name));
         context.SaveChanges();
         return orderDto;
+    }
+
+    public async Task<OrderDto> UpdateOrder(int parkingLotId, int OrderId, OrderDto newOrder)
+    {
+        var parkingLotEntity = context.ParkingLotEntities.Include(e => e.Orders).FirstOrDefault(i => i.Id.Equals(parkingLotId));
+        var entity = parkingLotEntity.Orders.Find(e=>e.Id.Equals(OrderId));
+        entity.IsOpen = false;
+        entity.CloseTime = DateTime.Now.ToString();
+        return new OrderDto(entity);
     }
 }

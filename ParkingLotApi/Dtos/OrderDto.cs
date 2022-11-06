@@ -9,8 +9,17 @@ namespace ParkingLotApi.Dtos
         {
             IsOpen = true;
         }
+        public OrderDto(OrderEntity orderEntity)
+        {
+           OrderNumber = orderEntity.OrderNumber;
+           ParkingLotName = orderEntity.ParkingLotName;
+           PlateNumber = orderEntity.PlateNumber;
+           CreateTime = orderEntity.CreateTime;
+           CloseTime = orderEntity.CloseTime;
+           IsOpen = orderEntity.IsOpen;
+        }
 
-      public string OrderNumber { get; set; }
+        public string OrderNumber { get; set; }
       public string ParkingLotName { get; set; }
 
       public string PlateNumber { get; set; }
