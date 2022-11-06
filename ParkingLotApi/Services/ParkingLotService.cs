@@ -55,5 +55,13 @@ namespace ParkingLotApi.Services
             var selectedPage = parkingLots.Select(parkingLot => parkingLot).Skip((startPage - 1) * pageSize).Take(pageSize).ToList();
             return selectedPage.Select(parkingLot => new ParkingLotDto(parkingLot)).ToList();
         }
+
+        public async Task<ParkingLotDto> UpdateParkingLotById(ParkingLotDto parkingLotDto,int id)
+        {
+            var foundParkingLot = parkingLotContext.ParkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            foundParkingLot.Capcity = parkingLotDto.Capcity;
+            await parkingLotContext.SaveChangesAsync();
+            return new ParkingLotDto(foundParkingLot);
+        }
     }
 }

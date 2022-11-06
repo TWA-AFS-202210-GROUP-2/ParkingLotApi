@@ -142,7 +142,22 @@ namespace ParkingLotApiTest.ControllerTest
             var returnParkingLots = JsonConvert.DeserializeObject<List<ParkingLotDto>>(body);
 
             Assert.Equal(15,returnParkingLots.Count);
+        }
 
+        [Fact]
+        public async Task Should_update_parkingLot_by_id_success()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = GenerateParkingLot("p1", 150);
+            var createResponse = await PostParkingLot(parkingLotDto, client);
+            parkingLotDto.Capcity = 300;
+            await client.PutAsync(createResponse.Headers.Location, GetStringContent(parkingLotDto));
+            //when
+            var getParkingLot = await client.GetAsync(createResponse.Headers.Location);
+            var result = await Deserialize(getParkingLot);
+            //then
+            Assert.Equal(300, result.Capcity);
         }
 
         public async Task<HttpResponseMessage> PostParkingLot(ParkingLotDto parkingLotDto,HttpClient client)

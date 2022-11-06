@@ -63,4 +63,11 @@ public class ParkingLotController : ControllerBase
 
         return this.NoContent();
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult<ParkingLotDto>> UpdateParkingLotById(ParkingLotDto parkingLotDto,[FromRoute]int id)
+    {
+        var result = await parkingLotService.UpdateParkingLotById(parkingLotDto,id);
+        return Ok(result);
+    }
 }
