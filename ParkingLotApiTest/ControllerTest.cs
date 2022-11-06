@@ -92,7 +92,9 @@ namespace ParkingLotApiTest
             // given : a parking lot
             var client = GetClient();
             NewParkingLotData();
-            var pl = new ParkingLotDto(_parkingLotContext.ParkingLots.FirstOrDefault());
+            NewParkingLotData();
+            var pl = new ParkingLotDto(new ParkingLotEntity(){Name = "AAA",Orders = NewOrderData("AAA"), Capacity = 3, Location = "Liaoning"}
+            );
             var postBody = new StringContent(JsonConvert.SerializeObject(pl), Encoding.UTF8, "application/json");
             var plIdbody = await client.PostAsync("parkinglots", postBody);
             plIdbody.EnsureSuccessStatusCode();
