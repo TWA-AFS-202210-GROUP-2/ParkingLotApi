@@ -27,7 +27,7 @@ namespace ParkingLotApi.Services
 
             if (CapacityBelowZero(parkingLotDto.Capacity))
             {
-                throw new ParkingLotCapacityBelowZeroException("Capacity below zero!");
+                throw new Exception("Capacity below zero!");
             }
 
             var parkingLotEntity = parkingLotDto.ToEntity();
