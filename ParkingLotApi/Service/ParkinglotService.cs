@@ -34,7 +34,7 @@ namespace ParkingLotApi.Services
             await parkinglotDbContext.Parkinglot.AddAsync(parkinglotEntity);
             await parkinglotDbContext.SaveChangesAsync();
 
-            // return company id
+            // return parking id
             return parkinglotEntity.Id;
         }
 
