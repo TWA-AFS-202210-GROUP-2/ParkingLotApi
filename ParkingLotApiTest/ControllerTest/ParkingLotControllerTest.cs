@@ -125,6 +125,23 @@ namespace ParkingLotApiTest.ControllerTest
             var returnParkingLots = JsonConvert.DeserializeObject<List<ParkingLotDto>>(body);
 
             Assert.Empty(returnParkingLots);
+        }
+
+        [Fact]
+        public async Task Should_return_15_parkingLots_success()
+        {
+            //given
+            var client = GetClient();
+            for(int i = 0; i < 15; i++)
+            {
+                await PostParkingLot(GenerateParkingLot($"p{i + 1}"), client);
+            }
+
+            var allParkingLotsResponse = await client.GetAsync("/parkingLots?startPage=1");
+            var body = await allParkingLotsResponse.Content.ReadAsStringAsync();
+            var returnParkingLots = JsonConvert.DeserializeObject<List<ParkingLotDto>>(body);
+
+            Assert.Equal(15,returnParkingLots.Count);
 
         }
 
@@ -146,6 +163,16 @@ namespace ParkingLotApiTest.ControllerTest
         {
             var body = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<ParkingLotDto>(body);
+        }
+
+        public ParkingLotDto GenerateParkingLot(string name, int capacity=100,string location ="wudaokou")
+        {
+            return new ParkingLotDto
+            {
+                Name = name,
+                Capcity = capacity,
+                Location = location
+            };
         }
     }
 }

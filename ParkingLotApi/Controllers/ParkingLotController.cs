@@ -39,8 +39,12 @@ public class ParkingLotController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ParkingLotDto>>> GetAllParkingLots()
+    public async Task<ActionResult<IEnumerable<ParkingLotDto>>> GetAllParkingLots([FromQuery]int? startPage)
     {
+        if(startPage != null)
+        {
+            return Ok(await parkingLotService.GetByPage((int)startPage));
+        }
         var parkingLotDtos = await parkingLotService.GetAllParkingLots();
         return Ok(parkingLotDtos);
     }
