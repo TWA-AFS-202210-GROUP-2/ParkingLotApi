@@ -26,7 +26,10 @@ using (var scope = app.Services.CreateScope())
 
     if (dbContext.Database.ProviderName.ToLower().Contains("mysql"))
     {
-        dbContext.Database.Migrate();
+
+        dbContext.Database.EnsureDeleted();
+        dbContext.Database.EnsureCreated();
+        //dbContext.Database.Migrate();
     }
 }
 
