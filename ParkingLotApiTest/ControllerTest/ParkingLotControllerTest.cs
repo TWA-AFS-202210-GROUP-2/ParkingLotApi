@@ -16,6 +16,7 @@ using ParkingLotApi.Models;
 
 namespace ParkingLotApiTest.ControllerTest
 {
+    [Collection("test")]
     public class ParkingLotControllerTest : TestBase
     {
         public ParkingLotControllerTest(CustomWebApplicationFactory<Program> factory)
