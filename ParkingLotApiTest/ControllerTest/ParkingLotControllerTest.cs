@@ -7,7 +7,9 @@ namespace ParkingLotApiTest.ControllerTest
     using Microsoft.AspNetCore.Mvc.Testing;
     using Newtonsoft.Json;
     using ParkingLotApi.Dtos;
+    using System;
     using System.Collections.Generic;
+    using System.Data;
     using System.Net;
     using System.Net.Http;
     using System.Net.Mime;
@@ -160,6 +162,77 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal(300, result.Capcity);
         }
 
+        [Fact]
+        public async Task Should_add_order_of_parkingLot_success()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = new ParkingLotDto
+            {
+                Name = "parkingLot one",
+                Capcity = 100,
+                Location = "wudaokou"
+            };
+            var createParkingLot = await PostParkingLot(parkingLotDto, client);
+            OrderDto orderDto = GenerateOrder();
+            //when
+            var response = await PostOrder(orderDto, client, $"{createParkingLot.Headers.Location}/orders");
+            //then
+            var parkingLotResponse = await client.GetAsync($"{createParkingLot.Headers.Location}/orders");
+            var body = await parkingLotResponse.Content.ReadAsStringAsync();
+            var returnOrders = JsonConvert.DeserializeObject<List<OrderDto>>(body);
+            Assert.Single(returnOrders);
+            /*Assert.Equal(orderDto.OrderNumber, returnParkingLot.OrderDtos[0].OrderNumber);*/
+        }
+
+        [Fact]
+        public async Task Should_return_update_order_success()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = new ParkingLotDto
+            {
+                Name = "parkingLot one",
+                Capcity = 100,
+                Location = "wudaokou"
+            };
+            var createParkingLot = await PostParkingLot(parkingLotDto, client);
+            OrderDto orderDto = GenerateOrder();
+            await PostOrder(orderDto, client, $"{createParkingLot.Headers.Location}/orders");
+            orderDto.ClosedTime = DateTime.Now.ToString();
+            orderDto.OrderStatus = "close";
+            var httpContent = JsonConvert.SerializeObject(orderDto);
+            var putBody =new StringContent(httpContent, Encoding.UTF8, MediaTypeNames.Application.Json);
+            //when
+            var response = await client.PutAsync($"{createParkingLot.Headers.Location}/orders?plateNumber=J123456",putBody);
+            //then
+            var parkingLotResponse = await client.GetAsync($"{createParkingLot.Headers.Location}/orders");
+            var body = await parkingLotResponse.Content.ReadAsStringAsync();
+            var returnOrders = JsonConvert.DeserializeObject<List<OrderDto>>(body);
+            Assert.Equal(orderDto.OrderStatus, returnOrders[0].OrderStatus);
+        }
+
+        [Fact]
+        public async Task Should_return_BadRequest_when_add_order_given_parkingLot_is_full()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = new ParkingLotDto
+            {
+                Name = "parkingLot one",
+                Capcity = 1,
+                Location = "wudaokou"
+            };
+            var createParkingLot = await PostParkingLot(parkingLotDto, client);
+            OrderDto orderDto = GenerateOrder();
+            await PostOrder(orderDto, client, $"{createParkingLot.Headers.Location}/orders");
+            var orderDtoTwo= GenerateOrder("t123","BJ12345");
+            //when
+            var response = await PostOrder(orderDtoTwo, client, $"{createParkingLot.Headers.Location}/orders");
+            //then
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        }
+
         public async Task<HttpResponseMessage> PostParkingLot(ParkingLotDto parkingLotDto,HttpClient client)
         {
             var httpContent = JsonConvert.SerializeObject(parkingLotDto);
@@ -188,6 +261,27 @@ namespace ParkingLotApiTest.ControllerTest
                 Capcity = capacity,
                 Location = location
             };
+        }
+
+        public OrderDto GenerateOrder(string orderNumber="o123",string plateNumber="J123456")
+        {
+            return new OrderDto
+            {
+                OrderNumber = orderNumber,
+                ParkingLotName = "parkingLot one",
+                PlateNumber = plateNumber,
+                CreationTime = DateTime.Now.ToString(),
+                ClosedTime = "",
+                OrderStatus = "open"
+            };
+        }
+
+        public async Task<HttpResponseMessage> PostOrder(OrderDto orderDto, HttpClient client,string url)
+        {
+            var httpContent = JsonConvert.SerializeObject(orderDto);
+            StringContent content = new StringContent(httpContent, Encoding.UTF8, MediaTypeNames.Application.Json);
+            var response = await client.PostAsync(url, content);
+            return response;
         }
     }
 }
