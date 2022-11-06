@@ -31,5 +31,14 @@ namespace ParkingLotApiTest
             Assert.Equal(15, list.Count);
         }
 
+        [Fact]
+        public async void Should_change_order_info_when_update_by_close_a_order()
+        {
+            NewParkingLotData();
+            _parkingLotService.UpdateOrder(1);
+            var order = _parkingLotContext.Orders.Where(_=> _.Id == 1).FirstOrDefault();
+            Assert.Equal(false, order.IsClose);
+        }
+
     }
 }

@@ -66,5 +66,12 @@ namespace ParkingLotApi.Controllers
             var createOrderId = await _parkingLotService.CreateOrder(id, orderDto);
             return Created(string.Empty, createOrderId);
         }
+
+        [HttpPost("{id}/orders/{orderId}")]
+        public async Task<IActionResult> UpdateOrder([FromRoute] int id, [FromRoute] int orderId)
+        {
+            var createOrderId = await _parkingLotService.UpdateOrder(orderId);
+            return Created(string.Empty, createOrderId);
+        }
     }
 }

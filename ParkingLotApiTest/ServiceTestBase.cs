@@ -31,8 +31,8 @@ namespace ParkingLotApiTest
         {
             _parkingLotContext.ParkingLots.AddRange(new List<ParkingLotEntity>()
             {
-                new ParkingLotEntity(){Name = "AAA",Orders = NewOrderData("AAA"), Capacity = 3, Location = "Liaoning"},
-                new ParkingLotEntity(){Name = "BBB",Orders = NewOrderData("BBB"), Capacity = 2, Location = "Beijing"}
+                new ParkingLotEntity(){Name = "AAA", Orders = NewOrderData("AAA"), Capacity = 3, Location = "Liaoning"},
+                new ParkingLotEntity(){Name = "BBB", Orders = NewOrderData("BBB"), Capacity = 2, Location = "Beijing"}
             });
             _parkingLotContext.SaveChanges();
         }

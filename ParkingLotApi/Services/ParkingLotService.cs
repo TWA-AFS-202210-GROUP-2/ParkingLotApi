@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using ParkingLotApi.Dto;
 using ParkingLotApi.Model;
 using ParkingLotApi.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -86,6 +87,17 @@ namespace ParkingLotApi.Services
             await _parkingLotContext.Orders.AddAsync(orderEntity);
             await _parkingLotContext.SaveChangesAsync();
             return orderEntity.Id;
+        }
+
+        public async Task<int> UpdateOrder( int orderId)
+        {
+            var order = _parkingLotContext.Orders.FirstOrDefault(_ => _.Id == orderId);
+            order.IsClose = false;
+            order.CloseTime = DateTime.Now.ToString();
+
+            _parkingLotContext.Orders.Update(order);
+            await _parkingLotContext.SaveChangesAsync();
+            return order.Id;
         }
     }
 }

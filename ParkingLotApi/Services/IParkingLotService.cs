@@ -13,5 +13,6 @@ namespace ParkingLotApi.Services
         ParkingLotDto GetById(int id);
         Task<int> UpdateCapacityByIdAsync(int id, int capacity);
         Task<int> CreateOrder(int parkingLotId, OrderDto orderDto);
+        Task<int> UpdateOrder( int orderId);
     }
 }
