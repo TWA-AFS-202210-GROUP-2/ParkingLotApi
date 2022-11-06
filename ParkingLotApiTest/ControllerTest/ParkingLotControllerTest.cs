@@ -81,6 +81,53 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         }
 
+        [Fact]
+        public async Task Should_get_parkingLot_by_id_success()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = new ParkingLotDto
+            {
+                Name = "parkingLot one",
+                Capcity = 100,
+                Location = "wudaokou"
+            };
+            await PostParkingLot(parkingLotDto, client);
+            ParkingLotDto parkingLotDtoTwo = new ParkingLotDto
+            {
+                Name = "parkingLot two",
+                Capcity = 200,
+                Location = "qinghe"
+            };
+            var response = await PostParkingLot(parkingLotDtoTwo, client);
+            //when
+            var getParkingLot = await client.GetAsync(response.Headers.Location);
+            var result = await Deserialize(response);
+            //then
+            Assert.Equal("parkingLot two", result.Name);
+        }
+
+        /*[Fact]
+        public async Task Should_delete_parkingLot_by_id_success()
+        {
+            //given
+            var client = GetClient();
+            ParkingLotDto parkingLotDto = new ParkingLotDto
+            {
+                Name = "parkingLot one",
+                Capcity = 100,
+                Location = "wudaokou"
+            };
+            var response = await PostParkingLot(parkingLotDto, client);
+            await client.DeleteAsync(response.Headers.Location);
+            var allParkingLotsResponse = await client.GetAsync("/parkingLots");
+            var body = await allParkingLotsResponse.Content.ReadAsStringAsync();
+            var returnParkingLots = JsonConvert.DeserializeObject<List<ParkingLotDto>>(body);
+
+            Assert.Empty(returnParkingLots);
+
+        }*/
+
         public async Task<HttpResponseMessage> PostParkingLot(ParkingLotDto parkingLotDto,HttpClient client)
         {
             var httpContent = JsonConvert.SerializeObject(parkingLotDto);

@@ -35,7 +35,7 @@ public class ParkingLotController : ControllerBase
                 message = $"The name of ${parkingLotDto.Name} already exists."
             });
         }
-        return Created("/parkingLots",parkingLotDto);
+        return CreatedAtAction(nameof(GetParkingLotById),new {id =id}, parkingLotDto);
     }
 
     [HttpGet]
@@ -44,4 +44,19 @@ public class ParkingLotController : ControllerBase
         var parkingLotDtos = await parkingLotService.GetAllParkingLots();
         return Ok(parkingLotDtos);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<ParkingLotDto>> GetParkingLotById(int id)
+    {
+        var parkingLotDto = await parkingLotService.GetParkingLotById(id);
+        return Ok(parkingLotDto);
+    }
+
+    /*[HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteParkingLotById(int id)
+    {
+        await parkingLotService.DeleteParkingLotById(id);
+
+        return this.NoContent();
+    }*/
 }

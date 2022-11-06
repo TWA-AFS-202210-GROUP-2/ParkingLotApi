@@ -34,5 +34,18 @@ namespace ParkingLotApi.Services
             var parkingLots = parkingLotContext.ParkingLots;
             return parkingLots.Select(parkingLotEntity => new ParkingLotDto(parkingLotEntity)).ToList();
         }
+
+        public async Task<ParkingLotDto> GetParkingLotById(int id)
+        {
+            var foundParkingLot = await parkingLotContext.ParkingLots.FirstOrDefaultAsync(parkingLot => parkingLot.Id == id);
+            return new ParkingLotDto(foundParkingLot);
+        }
+
+        /*public async Task DeleteParkingLotById(int id)
+        {
+            var foundParkingLot = parkingLotContext.ParkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            parkingLotContext.ParkingLots.Remove(foundParkingLot);
+            await parkingLotContext.SaveChangesAsync();
+        }*/
     }
 }
