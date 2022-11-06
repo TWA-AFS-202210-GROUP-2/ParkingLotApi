@@ -13,6 +13,7 @@ namespace ParkingLotApi.Dtos
             Name = parkingLotEntity.Name;
             Capacity = parkingLotEntity.Capacity;
             Location = parkingLotEntity.Location;
+            Status = parkingLotEntity.Status;
         }
 
         public ParkingLotEntity ToEntity()
@@ -22,11 +23,13 @@ namespace ParkingLotApi.Dtos
                 Name = this.Name,
                 Capacity = this.Capacity,
                 Location = this.Location,
+                Status = this.Status,
             };
         }
 
         public string Name { get; set; }
         public int Capacity { get; set; }
         public string? Location { get; set; }
+        public bool Status { get; set; }
     }
 }

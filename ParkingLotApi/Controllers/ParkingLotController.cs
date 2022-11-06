@@ -16,11 +16,40 @@ namespace ParkingLotApi.Controllers
             this._parkingLotService = parkingLotService;
         }
 
+        [HttpGet("{parkingLotName}")]
+        public async Task<ActionResult<ParkingLotDto>> Get(string parkingLotName)
+        {
+            var parkingLot = await this._parkingLotService.GetParkingLot(parkingLotName);
+            return Ok(parkingLot);
+        }
+
         [HttpPost]
         public async Task<ActionResult<ParkingLotDto>> Add(ParkingLotDto parkingLotDto)
         {
-            await this._parkingLotService.AddNewParkingLot(parkingLotDto);
-            return Created($"/api/parkinglots", parkingLotDto);
+            try
+            {
+                await this._parkingLotService.AddNewParkingLot(parkingLotDto);
+                return Created($"/api/parkinglots", parkingLotDto);
+            }
+            catch (ParkingLotNameNotUniqueException e)
+            {
+                throw new ParkingLotNameNotUniqueException("Name not unique!");
+            }
+        }
+
+        [HttpDelete("{parkingLotName}")]
+        public async Task<ActionResult> DeleteByName(string parkingLotName)
+        {
+            await _parkingLotService.DeleteParkingLot(parkingLotName);
+
+            return this.NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> Delete()
+        {
+            await _parkingLotService.DeleteAll();
+            return this.NoContent();
         }
     }
 }
