@@ -69,6 +69,23 @@ namespace ParkingLotApiTest
             Assert.Equal(pl.Name, plGet.Name);
         }
 
+        [Fact]
+        public async void Should_update_a_parkinglot_capacity_by_id()
+        {
+            var client = GetClient();
+            NewParkingLotData();
+            var pl = new ParkingLotDto(_parkingLotContext.ParkingLots.FirstOrDefault());
+            var postBody = new StringContent(JsonConvert.SerializeObject(pl), Encoding.UTF8, "application/json");
+            var plIdbody = await client.PostAsync("parkinglots", postBody);
+            plIdbody.EnsureSuccessStatusCode();
+            var body = await plIdbody.Content.ReadAsStringAsync();
+            var id = JsonConvert.DeserializeObject<int>(body);
+            var plGetBody = await client.PatchAsync($"parkinglots/{id}?capacity=12", postBody);
+            var plGetPatchBody = await client.GetAsync($"parkinglots/{id}");
+            var plGetPatch = JsonConvert.DeserializeObject<ParkingLotEntity>(await plGetPatchBody.Content.ReadAsStringAsync());
+            Assert.Equal(12, plGetPatch.Capacity);
+        }
+
         public ControllerTest(CustomWebApplicationFactory<Program> factory) : base(factory)
         {
         }

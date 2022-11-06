@@ -62,5 +62,16 @@ namespace ParkingLotApi.Services
                 .FirstOrDefault(_ => _.Id == id);
             return new ParkingLotDto(parkingLot);
         }
+
+        public async Task<int> UpdateCapacityByIdAsync(int id, int capacity)
+        {
+            var parkingLot = _parkingLotContext.ParkingLots
+                .Include(_ => _.Orders)
+                .FirstOrDefault(_ => _.Id == id);
+            parkingLot.Capacity = capacity;
+            _parkingLotContext.ParkingLots.Update(parkingLot);
+            await _parkingLotContext.SaveChangesAsync();
+            return parkingLot.Id;
+        }
     }
 }
