@@ -17,10 +17,11 @@ namespace ParkingLotApiTest
         {
             var client = GetClient();
             NewParkingLotData();
-            var response = await client.GetAsync("/api/parkinglots");
+            var response = await client.GetAsync("parkinglots");
             response.EnsureSuccessStatusCode();
             var body = await response.Content.ReadAsStringAsync();
             var parkinglots = JsonConvert.DeserializeObject<List<ParkingLotEntity>>(body);
+            _parkingLotContext.ParkingLots.Count();
             Assert.Equal(2, parkinglots.Count);
         }
 

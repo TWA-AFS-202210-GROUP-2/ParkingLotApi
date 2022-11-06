@@ -18,9 +18,9 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetParkingLots()
+        public IActionResult GetParkingLots()
         {
-            var parkingLots = await _parkingLotService.GetAll();
+            var parkingLots = _parkingLotService.GetAll();
             return Ok(parkingLots);
         }
 

@@ -17,7 +17,7 @@ namespace ParkingLotApi.Services
             _parkingLotContext = parkingLotContext;
         }
 
-        public async Task<List<ParkingLotDto>> GetAll()
+        public List<ParkingLotDto> GetAll()
         {
             var parkingLots = _parkingLotContext.ParkingLots.ToList();
             return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot)).ToList();

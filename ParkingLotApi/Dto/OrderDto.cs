@@ -5,6 +5,9 @@ namespace ParkingLotApi.Dto
 {
     public class OrderDto
     {
+        public OrderDto()
+        {
+        }
         public OrderDto(OrderEntity orderEntity)
         {
             if (orderEntity != null)

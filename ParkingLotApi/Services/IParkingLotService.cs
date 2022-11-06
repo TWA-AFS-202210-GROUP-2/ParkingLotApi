@@ -6,7 +6,7 @@ namespace ParkingLotApi.Services
 {
     public interface IParkingLotService
     {
-        Task<List<ParkingLotDto>> GetAll();
+        List<ParkingLotDto> GetAll();
         Task<int> Create(ParkingLotDto parkingLotDto);
     }
 }
