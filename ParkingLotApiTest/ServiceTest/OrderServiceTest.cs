@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -74,6 +75,35 @@ namespace ParkingLotApiTest.ServiceTest
             var res = orderService.UpdateOrder(1,1, newOrder);
             //then
             Assert.Equal(false, res.Result.IsOpen);
+        }
+        [Fact]
+        public async Task Should_throw_excption_when_parking_lot_is_full()
+        {
+            //given
+
+            var context = GetParkingLotContext();
+            ParkingLotService parkingLotService = new ParkingLotService(context);
+            OrderService orderService = new OrderService(context);
+
+            var parkinglotDto = new ParkingLotDto(name: "SLB", capacity: 10, location: "tuspark");
+            var newOrder = new OrderDto
+            {
+                OrderNumber = "asd",
+                ParkingLotName = "SLB",
+                PlateNumber = "AABB",
+                CreateTime = "null",
+                CloseTime = "asdas",
+                IsOpen = true
+            };
+            parkingLotService.AddParkingLot(parkinglotDto);
+            for (int i = 0; i < 10; i++)
+            {
+                await orderService.CreateOrder(1, newOrder);
+            }
+            //when
+            await Assert.ThrowsAsync<Exception>(() => orderService.CreateOrder(1,newOrder));
+           
+           
         }
     }
 }

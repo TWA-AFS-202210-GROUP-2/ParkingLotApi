@@ -18,6 +18,10 @@ public class OrderService
     public async Task<OrderDto> CreateOrder(int parkingLotId,OrderDto orderDto)
     {
         var parkingLotEntity = context.ParkingLotEntities.Include(e=>e.Orders).FirstOrDefault(i=> i.Id.Equals(parkingLotId));
+        if (parkingLotEntity.Orders.FindAll(entity => entity.IsOpen.Equals(true)).Count >= parkingLotEntity.Capacity)
+        {
+            throw new Exception("not enough capacity");
+        }
         parkingLotEntity.Orders.Add(orderDto.ToEntity(parkingLotEntity.Name));
         context.SaveChanges();
         return orderDto;
