@@ -51,5 +51,11 @@ public class ParkingLotService
         });
         return pageList;
     }
+
+    public async Task<ParkingLotDto> GetbyId(int id)
+    {
+        var entity = context.ParkingLotEntities.FirstOrDefault(e => e.Id.Equals(id));
+        return new ParkingLotDto(entity);
+    }
 }
 

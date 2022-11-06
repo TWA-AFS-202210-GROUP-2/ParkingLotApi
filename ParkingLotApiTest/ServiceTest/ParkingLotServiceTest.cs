@@ -79,7 +79,44 @@ namespace ParkingLotApiTest.ServiceTest
 
             Assert.Equal(15, returnList.Result.Count);
         }
+        [Fact]
+        public async Task Should_get_item_item_by_selected_id()
+        {
+            //given
+            var context = GetParkingLotContext();
+            List<ParkingLotDto> list = new List<ParkingLotDto>();
+            ParkingLotService parkingLotService = new ParkingLotService(context);
+            for (int i = 0; i < 10; i++)
+            {
+                await parkingLotService.AddParkingLot(
+                    new ParkingLotDto(name: "SLB" + i.ToString(), capacity: 100, location: "tuspark"));
+            }
+            //when
+            var returnDto = parkingLotService.GetbyId(1);
+            //then
 
+            Assert.Equal("SLB"+"0",returnDto.Result.Name);
+        }
+        [Fact]
+        public async Task Should_update_item_item_by_selected_id()
+        {
+            //given
+            var context = GetParkingLotContext();
+            List<ParkingLotDto> list = new List<ParkingLotDto>();
+            ParkingLotService parkingLotService = new ParkingLotService(context);
+            for (int i = 0; i < 10; i++)
+            {
+                await parkingLotService.AddParkingLot(
+                    new ParkingLotDto(name: "SLB" + i.ToString(), capacity: 100, location: "tuspark"));
+            }
+
+
+            //when
+            var returnDto = parkingLotService.GetbyId(1);
+            //then
+
+            Assert.Equal("SLB" + "0", returnDto.Result.Name);
+        }
 
     }
 }
