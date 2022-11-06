@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using ParkingLotApi.Dtos;
 using ParkingLotApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using ParkingLotApi.Repository;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,6 +32,13 @@ namespace ParkingLotApi.Controllers
         public async Task<ActionResult<parkingDto>> GetById(int id)
         {
             var parkingDto = await this.parkingService.GetById(id);
+            return Ok(parkingDto);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<parkingDto>> PutById(int id, parkingEntity parking)
+        {
+            var parkingDto = await this.parkingService.PutById(id, parking);
             return Ok(parkingDto);
         }
 

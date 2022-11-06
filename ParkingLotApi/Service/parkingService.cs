@@ -58,5 +58,15 @@ namespace ParkingLotApi.Services
             return new parkingDto(foundparking);
 
         }
+
+        public async Task<parkingDto> PutById(int id, parkingEntity parking)
+        {
+            var foundparking = parkingDbContext.Parkings
+                .Include(parking => parking.order)
+                .FirstOrDefault(_ => _.Id == id);
+            foundparking = parking;
+            return new parkingDto(parking);
+
+        }
     }
 }

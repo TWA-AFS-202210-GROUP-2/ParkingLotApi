@@ -169,5 +169,37 @@
 
             Assert.Equal("IBM", returnparking.Name);
         }
+
+        [Fact]
+        public async Task Should_change_parking_by_id_success()
+        {
+            var client = GetClient();
+            parkingDto parkingDto = new parkingDto
+            {
+                Name = "IBM",
+                capacity = 100,
+                location = "beijing",
+            };
+
+            parkingDto parkingDto2 = new parkingDto
+            {
+                Name = "IBM",
+                capacity = 10,
+                location = "beijing",
+            };
+            var httpContent = JsonConvert.SerializeObject(parkingDto);
+            StringContent content = new StringContent(httpContent, Encoding.UTF8, MediaTypeNames.Application.Json);
+            var parkingResponse = await client.PostAsync("/Parkings", content);
+
+            var httpContent2 = JsonConvert.SerializeObject(parkingDto2);
+            StringContent content2 = new StringContent(httpContent2, Encoding.UTF8, MediaTypeNames.Application.Json);
+
+            var allParkingsResponse = await client.PutAsync(parkingResponse.Headers.Location, content2);
+            var body = await allParkingsResponse.Content.ReadAsStringAsync();
+
+            var returnparking = JsonConvert.DeserializeObject<parkingDto>(body);
+
+            Assert.Equal(10, returnparking.capacity);
+        }
     }
 }
