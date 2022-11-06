@@ -1,41 +1,43 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using ParkingLotApi.Dtos;
 using ParkingLotApi.Services;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+
+// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ParkingLotApi.Controllers
 {
     [ApiController]
-    [Route("parkinglots")]
-    public class ParkingLotController : ControllerBase
+    [Route("Parkings")]
+    public class parkingController : ControllerBase
     {
-        private readonly ParkinglotService parkinglotService;
+        private readonly parkingService parkingService;
 
-        public ParkingLotController(ParkinglotService parkinglotService)
+        public parkingController(parkingService parkingService)
         {
-            this.parkinglotService = parkinglotService;
+            this.parkingService = parkingService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ParkinglotDto>>> List()
+        public async Task<ActionResult<IEnumerable<parkingDto>>> List()
         {
-            var parkinglotDtos = await this.parkinglotService.GetAll();
+            var parkingDtos = await this.parkingService.GetAll();
 
-            return Ok(parkinglotDtos);
+            return Ok(parkingDtos);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ParkinglotDto>> GetById(int id)
+        public async Task<ActionResult<parkingDto>> GetById(int id)
         {
-            var parkingDto = await this.parkinglotService.GetById(id);
+            var parkingDto = await this.parkingService.GetById(id);
             return Ok(parkingDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<ParkinglotDto>> Add(ParkinglotDto parkingDto)
+        public async Task<ActionResult<parkingDto>> Add(parkingDto parkingDto)
         {
-            var id = await this.parkinglotService.AddParkinglot(parkingDto);
+            var id = await this.parkingService.Addparking(parkingDto);
 
             return CreatedAtAction(nameof(GetById), new { id = id }, parkingDto);
         }
@@ -43,7 +45,7 @@ namespace ParkingLotApi.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            await parkinglotService.DeleteParkinglot(id);
+            await parkingService.Deleteparking(id);
 
             return this.NoContent();
         }

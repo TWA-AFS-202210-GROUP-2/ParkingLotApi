@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ParkingLotApi.Repository;
+﻿using ParkingLotApi.Repository;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Net.Http;
 
 namespace ParkingLotApiTest
@@ -22,7 +18,10 @@ namespace ParkingLotApiTest
         {
             var scope = Factory.Services.CreateScope();
             var scopedServices = scope.ServiceProvider;
-            var context = scopedServices.GetRequiredService<ParkingLotContext>();
+            var context = scopedServices.GetRequiredService<parkingDbContext>();
+
+            context.orders.RemoveRange(context.orders);
+            context.Parkings.RemoveRange(context.Parkings);
 
             context.SaveChanges();
         }

@@ -1,8 +1,10 @@
-﻿namespace ParkingLotApi.Repository
+﻿using System.Collections.Generic;
+
+namespace ParkingLotApi.Repository
 {
-    public class ParkinglotEntity
+    public class parkingEntity
     {
-        public ParkinglotEntity()
+        public parkingEntity()
         {
         }
 
@@ -10,6 +12,7 @@
         public string Name { get; set; }
         public int capacity { get; set; }
         public string location { get; set; }
+        public List<orderEntity>? order { get; set; }
 
     }
 }

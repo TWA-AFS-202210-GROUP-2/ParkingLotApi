@@ -17,11 +17,11 @@
             {
                 var descriptor = services.SingleOrDefault(
                     d => d.ServiceType ==
-                        typeof(DbContextOptions<ParkingLotContext>));
+                        typeof(DbContextOptions<parkingDbContext>));
 
                 services.Remove(descriptor);
 
-                services.AddDbContext<ParkingLotContext>(options =>
+                services.AddDbContext<parkingDbContext>(options =>
                 {
                     options.UseInMemoryDatabase("InMemoryDbForTesting");
                 });
@@ -31,7 +31,7 @@
                 using (var scope = sp.CreateScope())
                 {
                     var scopedServices = scope.ServiceProvider;
-                    var db = scopedServices.GetRequiredService<ParkingLotContext>();
+                    var db = scopedServices.GetRequiredService<parkingDbContext>();
                     db.Database.EnsureCreated();
                 }
             });
