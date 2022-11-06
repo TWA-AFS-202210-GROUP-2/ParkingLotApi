@@ -27,12 +27,12 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ParkingLotContext>();
     using (var context = scope.ServiceProvider.GetService<ParkingLotContext>())
     {
-        //context.Database.EnsureDeleted();
-        //context.Database.EnsureCreated();
-        if (context.Database.IsRelational())
-        {
-            context.Database.Migrate();
-        }
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        //if (context.Database.IsRelational())
+        //{
+        //    context.Database.Migrate();
+        //}
 
     }
 }

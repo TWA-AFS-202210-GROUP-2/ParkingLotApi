@@ -23,7 +23,7 @@ namespace ParkingLotApi.Dto
 
         public string CreationTime { get; set; } = DateTime.Now.ToString();
 
-        public string? CloseTime { get; set; }
+        public string? CloseTime { get; set; } = DateTime.Now.ToString();
 
         public bool IsClose { get; set; } = true;
 

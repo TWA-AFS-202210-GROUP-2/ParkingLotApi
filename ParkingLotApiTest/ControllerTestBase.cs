@@ -1,24 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using ParkingLotApi.Model;
 using ParkingLotApi.Repository;
 using ParkingLotApi.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
+
 namespace ParkingLotApiTest
 {
-    public class TestBase
+    public class ControllerTestBase
     {
         internal IParkingLotService _parkingLotService;
         internal ParkingLotContext _parkingLotContext;
 
-        public TestBase()
+        public ControllerTestBase()
         {
             var options = new DbContextOptionsBuilder<ParkingLotContext>()
-                .UseInMemoryDatabase(databaseName: "DB")
+                .UseInMemoryDatabase(databaseName: "ControllerDB")
                 .Options;
 
             _parkingLotContext = new ParkingLotContext(options);
@@ -44,6 +48,19 @@ namespace ParkingLotApiTest
                 new OrderEntity() { ParkingLotName = parkingLotName, PlateNumber = parkingLotName + "B6666",
                     CreationTime = DateTime.Now.ToString() },
             };
+        }
+
+        public void Dispose()
+        {
+            _parkingLotContext.RemoveRange(_parkingLotContext.Orders);
+            _parkingLotContext.RemoveRange(_parkingLotContext.ParkingLots);
+            _parkingLotContext.SaveChanges();
+        }
+
+        public static HttpClient GetClient()
+        {
+            var factory = new WebApplicationFactory<Program>();
+            return factory.CreateClient();
         }
     }
 }
