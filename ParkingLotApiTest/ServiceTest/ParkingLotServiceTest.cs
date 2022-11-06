@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using System;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Newtonsoft.Json;
 using ParkingLotApi.Dtos;
 using System.Collections.Generic;
@@ -58,7 +59,27 @@ namespace ParkingLotApiTest.ServiceTest
 
             Assert.Equal(0, context.ParkingLotEntities.Count());
         }
+        [Fact]
+        public async Task Should_show_15_item_by_selected_id()
+        {
+            //given
+            var context = GetParkingLotContext();
+            List<ParkingLotDto> list = new List<ParkingLotDto>();
+            ParkingLotService parkingLotService = new ParkingLotService(context);
+            for (int i = 0; i < 100; i++)
+            {
+                await parkingLotService.AddParkingLot(
+                    new ParkingLotDto(name: "SLB"+ i.ToString(), capacity: 100, location: "tuspark"));
+            }
+            Assert.Equal(100,context.ParkingLotEntities.Count());
 
-       
+            //when
+            var returnList = parkingLotService.GetbyPage(1);
+            //then
+
+            Assert.Equal(15, returnList.Result.Count);
+        }
+
+
     }
 }

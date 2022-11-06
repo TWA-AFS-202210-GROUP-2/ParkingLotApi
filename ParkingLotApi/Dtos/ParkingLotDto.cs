@@ -16,6 +16,17 @@ public class ParkingLotDto
         Location = location;
     }
 
+    public ParkingLotDto()
+    {
+
+    }
+    public ParkingLotDto(ParkingLotEntity parkingLotEntity)
+    {
+        Name = parkingLotEntity.Name;
+        Capacity = parkingLotEntity.Capacity;
+        Location = parkingLotEntity.Location;
+
+    }
     public ParkingLotEntity ToEntity()
     {
         return new ParkingLotEntity()

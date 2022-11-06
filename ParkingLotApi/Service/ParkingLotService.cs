@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using ParkingLotApi.Dtos;
+using ParkingLotApi.Models;
 using ParkingLotApi.Repository;
 
 namespace ParkingLotApi.Service;
@@ -29,6 +34,22 @@ public class ParkingLotService
         var parkingLot = await context.ParkingLotEntities.FirstOrDefaultAsync(item => item.Id.Equals(id));
         context.ParkingLotEntities.Remove(parkingLot);
         context.SaveChanges();
+    }
+
+    public async Task<List<ParkingLotDto>> GetbyPage(int pageNumber)
+    {
+        int start = pageNumber * 15;
+        int end = 15 * (pageNumber + 1);
+        var allList = context.ParkingLotEntities.ToList();
+        var pageList = new List<ParkingLotDto>();
+        allList.ForEach(item =>
+        {
+            if (item.Id > start && item.Id <= end)
+            {
+                pageList.Add(new ParkingLotDto(item));
+            }
+        });
+        return pageList;
     }
 }
 

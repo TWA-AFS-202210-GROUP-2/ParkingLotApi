@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotApi.Dtos;
 using ParkingLotApi.Repository;
@@ -30,6 +31,13 @@ namespace ParkingLotApi.Controllers
         {
             await parkingLotService.DeleteParkingLot(id);
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<List<ParkingLotDto>> GetByPage([FromQuery] int pageNumber)
+        {
+            var list = await parkingLotService.GetbyPage(pageNumber);
+            return list;
         }
 
     }
