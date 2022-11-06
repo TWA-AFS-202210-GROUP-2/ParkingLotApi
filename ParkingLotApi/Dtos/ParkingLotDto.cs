@@ -36,7 +36,7 @@ public class ParkingLotDto
             Name = this.Name,
             Capacity = this.Capacity,
             Location = this.Location,
-            Orders = this.Orders?.Select(i => i.ToEntity()).ToList()
+            Orders = this.Orders?.Select(i => i.ToEntity(this.Name)).ToList()
 
         };
     }

@@ -17,14 +17,14 @@ namespace ParkingLotApi.Dtos
       public string CreateTime { get; set; }
       public string CloseTime { get; set; }
       public Boolean IsOpen { get; set; }
-      public OrderEntity ToEntity()
+      public OrderEntity ToEntity(string parkingLot)
       {
           var entity = new OrderEntity
           {
-              OrderNumber = this.OrderNumber,
-              ParkingLotName = this.ParkingLotName,
+              OrderNumber = new Guid().ToString(),
+              ParkingLotName = parkingLot,
               PlateNumber = this.PlateNumber,
-              CreateTime = this.CreateTime,
+              CreateTime = DateTime.Now.ToString(),
               CloseTime = this.CloseTime,
               IsOpen = this.IsOpen
           };

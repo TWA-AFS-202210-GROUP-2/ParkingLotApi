@@ -22,16 +22,7 @@ namespace ParkingLotApiTest.ControllerTest
             var application = new WebApplicationFactory<Program>();
             var httpClient = application.CreateClient();
             var parkinglot = new ParkingLotDto(name: "SLB", capacity: 100, location: "tuspark");
-            parkinglot.Orders = new List<OrderDto>();
-            parkinglot.Orders.Add(new OrderDto
-            {
-                OrderNumber = "asd",
-                ParkingLotName = "SLB",
-                PlateNumber = "AABB",
-                CreateTime = "null",
-                CloseTime = "asdas",
-                IsOpen = true
-            });
+           
             var newOrder = new OrderDto
             {
                 OrderNumber = "asd",
