@@ -70,4 +70,19 @@ public class ParkingLotController : ControllerBase
         var result = await parkingLotService.UpdateParkingLotById(parkingLotDto,id);
         return Ok(result);
     }
+
+    [HttpPost("{id}/orders")]
+    public async Task<ActionResult<OrderDto>> AddOrderToParkingLot(OrderDto orderDto, [FromRoute] int id)
+    {
+        var orderId = await parkingLotService.AddOrder(orderDto, id);
+        return Created("{id}/orders",orderDto);
+        /*return CreatedAtAction(nameof(GetOrderById), new { orderId = orderId }, orderDto);*/
+    }
+
+    [HttpGet("{id}/orders")]
+    public async Task<ActionResult<List<OrderDto>>> GetOrderById([FromRoute] int id)
+    {
+        var getOrderDtos = await parkingLotService.GetOrder(id);
+        return Ok(getOrderDtos);
+    }
 }

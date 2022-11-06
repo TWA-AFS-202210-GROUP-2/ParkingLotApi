@@ -63,5 +63,30 @@ namespace ParkingLotApi.Services
             await parkingLotContext.SaveChangesAsync();
             return new ParkingLotDto(foundParkingLot);
         }
+
+        public async Task<int> AddOrder(OrderDto orderDto,int id)
+        {
+            OrderEntity orderEntity = orderDto.ToEntity();
+            var parkingLots= await parkingLotContext.ParkingLots.
+                Include(parklot => parklot.Orders).ToListAsync();
+            var foundParkingLot = parkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            if(foundParkingLot.Orders == null)
+            {
+                foundParkingLot.Orders = new List<OrderEntity>();
+            }
+            foundParkingLot.Orders.Add(orderEntity);
+            await parkingLotContext.Orders.AddAsync(orderEntity);
+            await parkingLotContext.SaveChangesAsync();
+            return orderEntity.Id;
+        }
+
+        public async Task<List<OrderDto>> GetOrder(int id)
+        {
+            var parkingLots = await parkingLotContext.ParkingLots.
+                Include(parklot => parklot.Orders).ToListAsync();
+            var foundParkingLot = parkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
+            return foundParkingLot.Orders.Select(orderEntity => new OrderDto(orderEntity)).ToList();
+        }
     }
+
 }

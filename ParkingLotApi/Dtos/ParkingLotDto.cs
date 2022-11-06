@@ -1,5 +1,7 @@
 ﻿using ParkingLotApi.Model;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ParkingLotApi.Dtos
 {
@@ -14,10 +16,19 @@ namespace ParkingLotApi.Dtos
             Name = parkingLotEntity.Name;
             Capcity=parkingLotEntity.Capcity;
             Location = parkingLotEntity.Location;
+            if(parkingLotEntity.Orders == null)
+            {
+                OrderDtos = new List<OrderDto>();
+            }
+            else
+            {
+                OrderDtos = parkingLotEntity.Orders?.Select(orderEntity => new OrderDto(orderEntity)).ToList();
+            }
         }
         public string Name { get; set; }
         public int Capcity { get; set; }
         public string Location { get; set; }
+        public List<OrderDto>? OrderDtos { get; set; }
 
         public ParkingLotEntity ToEntity()
         {
@@ -26,6 +37,7 @@ namespace ParkingLotApi.Dtos
                 Name = Name,
                 Capcity = Capcity,
                 Location = Location,
+                Orders = this.OrderDtos?.Select(orderDto => orderDto.ToEntity()).ToList(),
             };
         }
     }
