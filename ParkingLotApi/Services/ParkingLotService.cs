@@ -80,19 +80,24 @@ namespace ParkingLotApi.Services
             var parkingLot = _parkingLotContext.ParkingLots
                 .Include(_ => _.Orders)
                 .FirstOrDefault(_ => _.Id == parkingLotId);
-            orderDto.ParkingLotName = parkingLot.Name;
-            OrderEntity orderEntity = orderDto.ToEntity();
-            parkingLot.Orders.Add(orderEntity);
-            _parkingLotContext.ParkingLots.Update(parkingLot);
-            await _parkingLotContext.Orders.AddAsync(orderEntity);
-            await _parkingLotContext.SaveChangesAsync();
-            return orderEntity.Id;
+            if (parkingLot.Orders.Where(order => order.IsOpen == true).ToList()
+                .Count < parkingLot.Capacity)
+            {
+                orderDto.ParkingLotName = parkingLot.Name;
+                OrderEntity orderEntity = orderDto.ToEntity();
+                parkingLot.Orders.Add(orderEntity);
+                _parkingLotContext.ParkingLots.Update(parkingLot);
+                await _parkingLotContext.Orders.AddAsync(orderEntity);
+                await _parkingLotContext.SaveChangesAsync();
+                return orderEntity.Id;
+            }
+            return 0;
         }
 
         public async Task<int> UpdateOrder( int orderId)
         {
             var order = _parkingLotContext.Orders.FirstOrDefault(_ => _.Id == orderId);
-            order.IsClose = false;
+            order.IsOpen = false;
             order.CloseTime = DateTime.Now.ToString();
 
             _parkingLotContext.Orders.Update(order);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using ParkingLotApi.Dto;
 using ParkingLotApi.Repository;
 using ParkingLotApi.Services;
 using System;
@@ -37,8 +38,16 @@ namespace ParkingLotApiTest
             NewParkingLotData();
             _parkingLotService.UpdateOrder(1);
             var order = _parkingLotContext.Orders.Where(_=> _.Id == 1).FirstOrDefault();
-            Assert.Equal(false, order.IsClose);
+            Assert.Equal(false, order.IsOpen);
         }
 
+        [Fact]
+        public async void Should_return_badrequest_when_create_out_of_capacity()
+        {
+            NewParkingLotData();
+            var parkinglot = _parkingLotContext.ParkingLots.Where(_ => _.Capacity == 2).FirstOrDefault();
+            var msgNum = await _parkingLotService.CreateOrder(parkinglot.Id, new OrderDto(parkinglot.Orders.FirstOrDefault()));
+            Assert.Equal(0, msgNum);
+        }
     }
 }

@@ -16,7 +16,7 @@ namespace ParkingLotApi.Dto
                 PlateNumber = orderEntity.PlateNumber;
                 CreationTime = orderEntity.CreationTime;
                 CloseTime = orderEntity?.CloseTime;
-                IsClose = orderEntity.IsClose;
+                IsOpen = orderEntity.IsOpen;
             }
         }
 
@@ -28,7 +28,7 @@ namespace ParkingLotApi.Dto
 
         public string? CloseTime { get; set; } = DateTime.Now.ToString();
 
-        public bool IsClose { get; set; } = true;
+        public bool IsOpen { get; set; } = true;
 
         public OrderEntity ToEntity()
         {
@@ -38,7 +38,7 @@ namespace ParkingLotApi.Dto
                 PlateNumber = PlateNumber,
                 CreationTime = CreationTime,
                 CloseTime = this?.CloseTime,
-                IsClose = IsClose,
+                IsOpen = IsOpen,
             };
         }
     }

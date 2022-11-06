@@ -14,7 +14,7 @@ namespace ParkingLotApi.Model
 
         public string? CloseTime { get; set; }
 
-        public bool IsClose { get; set; } = true;
+        public bool IsOpen { get; set; } = true;
     }
 
     public enum OrderStatus
