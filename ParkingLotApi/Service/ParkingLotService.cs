@@ -57,5 +57,16 @@ public class ParkingLotService
         var entity = context.ParkingLotEntities.FirstOrDefault(e => e.Id.Equals(id));
         return new ParkingLotDto(entity);
     }
+
+    public async Task<ParkingLotDto> UpdateParkingLot(int id, ParkingLotDto parkingLotDto)
+    {
+        var entity = context.ParkingLotEntities.FirstOrDefault(e => e.Id.Equals(id));
+        if (entity != null)
+        {
+            entity.Capacity = parkingLotDto.Capacity;
+        }
+
+        return new ParkingLotDto(entity);
+    }
 }
 

@@ -110,12 +110,13 @@ namespace ParkingLotApiTest.ServiceTest
                     new ParkingLotDto(name: "SLB" + i.ToString(), capacity: 100, location: "tuspark"));
             }
 
-
+            var ToBeUpdated = parkingLotService.GetbyId(1);
+            ToBeUpdated.Result.Capacity = 200;
             //when
-            var returnDto = parkingLotService.GetbyId(1);
+            var returnDto = parkingLotService.UpdateParkingLot(1,ToBeUpdated.Result);
             //then
-
-            Assert.Equal("SLB" + "0", returnDto.Result.Name);
+            ToBeUpdated = parkingLotService.GetbyId(1);
+            Assert.Equal(200, ToBeUpdated.Result.Capacity);
         }
 
     }
