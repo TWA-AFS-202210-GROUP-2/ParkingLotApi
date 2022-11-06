@@ -41,11 +41,11 @@ namespace ParkingLotApi.Services
             return new ParkingLotDto(foundParkingLot);
         }
 
-        /*public async Task DeleteParkingLotById(int id)
+        public async Task DeleteParkingLotById(int id)
         {
             var foundParkingLot = parkingLotContext.ParkingLots.FirstOrDefault(parkingLot => parkingLot.Id == id);
             parkingLotContext.ParkingLots.Remove(foundParkingLot);
             await parkingLotContext.SaveChangesAsync();
-        }*/
+        }
     }
 }

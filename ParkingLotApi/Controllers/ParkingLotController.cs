@@ -52,11 +52,11 @@ public class ParkingLotController : ControllerBase
         return Ok(parkingLotDto);
     }
 
-    /*[HttpDelete("{id}")]
+    [HttpDelete("{id}")]
     public async Task<ActionResult> DeleteParkingLotById(int id)
     {
         await parkingLotService.DeleteParkingLotById(id);
 
         return this.NoContent();
-    }*/
+    }
 }

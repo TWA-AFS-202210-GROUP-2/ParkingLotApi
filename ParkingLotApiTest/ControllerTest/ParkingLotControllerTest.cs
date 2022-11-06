@@ -107,7 +107,7 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal("parkingLot two", result.Name);
         }
 
-        /*[Fact]
+        [Fact]
         public async Task Should_delete_parkingLot_by_id_success()
         {
             //given
@@ -126,7 +126,7 @@ namespace ParkingLotApiTest.ControllerTest
 
             Assert.Empty(returnParkingLots);
 
-        }*/
+        }
 
         public async Task<HttpResponseMessage> PostParkingLot(ParkingLotDto parkingLotDto,HttpClient client)
         {
