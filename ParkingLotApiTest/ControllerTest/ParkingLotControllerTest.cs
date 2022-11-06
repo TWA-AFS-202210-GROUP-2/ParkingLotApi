@@ -100,6 +100,34 @@ namespace ParkingLotApiTest.ControllerTest
         }
 
         [Fact]
+        public async void Should_return_parkingLot_when_get_given_parkinglot_name()
+        {
+            // given
+            var httpClient = this.SetUpHttpClient();
+
+            for (int i = 0; i < 20; i++)
+            {
+                var newParkingLotDto = new ParkingLotDto()
+                {
+                    Name = $"ParkingLot{i + 1}",
+                    Capacity = 100,
+                    Location = "Zone-A",
+                    Status = false,
+                };
+                await this.PostNewParkingLot(newParkingLotDto);
+            }
+
+            // when
+            var response = await httpClient.GetAsync($"api/parkinglots/parkingLot{2}");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var parkingLotDto = JsonConvert.DeserializeObject<ParkingLotDto>(responseBody);
+
+            // then
+            Assert.Equal("ParkingLot2", parkingLotDto.Name);
+        }
+
+        [Fact]
         public async void Should_return_parkingLot_list_by_pages_successfully()
         {
             // given
