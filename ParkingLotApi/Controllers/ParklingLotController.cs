@@ -46,6 +46,12 @@ namespace ParkingLotApi.Controllers
             var parkingLotDto = await parkingLotService.GetbyId(id);
             return parkingLotDto;
         }
+        [HttpPut("{id}")]
+        public async Task<ParkingLotDto> Update(int id, ParkingLotDto parkingLotDto)
+        {
+            var parkingLot = await parkingLotService.UpdateParkingLot(id,parkingLotDto);
+            return parkingLot;
+        }
 
     }
 }

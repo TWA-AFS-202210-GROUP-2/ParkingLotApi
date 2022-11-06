@@ -22,5 +22,13 @@ namespace ParkingLotApi.Controllers
             return Created("", order);
         }
 
+        [HttpPut("{orderId}")]
+
+        public async Task<IActionResult> CreateOrder(int parkingLotId, int orderId,OrderDto orderDto)
+        {
+            OrderDto order = await orderService.UpdateOrder(parkingLotId,orderId, orderDto);
+            return Ok(order);
+        }
+
     }
 }
