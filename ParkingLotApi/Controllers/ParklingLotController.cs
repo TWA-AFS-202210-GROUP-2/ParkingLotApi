@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ParkingLotApi.Dtos;
 using ParkingLotApi.Repository;
+using ParkingLotApi.Service;
 
 namespace ParkingLotApi.Controllers
 {
@@ -9,26 +10,27 @@ namespace ParkingLotApi.Controllers
     [Route("api/parkinglots")]
     public class ParklingLotController : Controller
     {
-        private readonly ParkingLotContext dbcontext;
+     
+        private readonly ParkingLotService parkingLotService;
 
-        public ParklingLotController(ParkingLotContext dbContext)
+        public ParklingLotController(ParkingLotService parkingLotService)
         {
-            this.dbcontext = dbContext;
+            this.parkingLotService = parkingLotService;
         }
         [HttpPost]
         public async Task<IActionResult> PostOneParkingLot(ParkingLotDto parkingLotDto)
         {
-            var parkingLotEntityy = parkingLotDto.ToEntity();
-            dbcontext.ParkingLotEntities.Add(parkingLotEntityy);
-            dbcontext.SaveChanges();
+            var id = parkingLotService.AddParkingLot(parkingLotDto);
+
             return Created("parkinglots",parkingLotDto);
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAll()
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteById(int id)
         {
-            dbcontext.ParkingLotEntities.RemoveRange(dbcontext.ParkingLotEntities);
-            dbcontext.SaveChanges();
+            await parkingLotService.DeleteParkingLot(id);
             return NoContent();
         }
+
     }
 }

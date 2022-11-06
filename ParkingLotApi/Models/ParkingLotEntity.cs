@@ -1,3 +1,5 @@
+using ParkingLotApi.Dtos;
+
 namespace ParkingLotApi.Models;
 
 public class ParkingLotEntity
