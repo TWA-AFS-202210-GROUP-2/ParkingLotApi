@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace ParkingLotApiTest
 {
     using EFCoreRelationshipsPracticeTest;
+    using ParkingLotApi.Dto;
 
     public class ControllerTest : TestBase 
     {
@@ -32,13 +33,13 @@ namespace ParkingLotApiTest
         {
             var client = GetClient();
             NewParkingLotData();
-            var pl = _parkingLotContext.ParkingLots.FirstOrDefault();
+            var pl = new ParkingLotDto(_parkingLotContext.ParkingLots.FirstOrDefault());
             var postBody = new StringContent(JsonConvert.SerializeObject(pl), Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("parkinglots", postBody);
-            response.EnsureSuccessStatusCode();
-            var body = await response.Content.ReadAsStringAsync();
-            var parkinglots = JsonConvert.DeserializeObject<List<ParkingLotEntity>>(body);
-            Assert.Equal(2, parkinglots.Count);
+            var plIdbody = await client.PostAsync("parkinglots", postBody);
+            plIdbody.EnsureSuccessStatusCode();
+            var body = await plIdbody.Content.ReadAsStringAsync();
+            var id = JsonConvert.DeserializeObject<int>(body);
+            Assert.Equal(pl.Name, _parkingLotContext.ParkingLots.Where(_ => _.Id == id).FirstOrDefault().Name);
         }
 
         public ControllerTest(CustomWebApplicationFactory<Program> factory) : base(factory)

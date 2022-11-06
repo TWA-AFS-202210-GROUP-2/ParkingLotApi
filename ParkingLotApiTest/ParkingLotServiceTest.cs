@@ -15,7 +15,7 @@ namespace ParkingLotApiTest
         public async void Should_return_parkinglot_with_orders_when_get_all()
         {
             NewParkingLotData();
-            var parkinglots = _parkingLotService.GetAll();
+            var parkinglots = _parkingLotService.GetAll(0);
             Assert.Equal(2, parkinglots.Count);
         }
 

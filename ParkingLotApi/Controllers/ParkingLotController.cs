@@ -18,10 +18,18 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetParkingLots()
+        public IActionResult GetParkingLots([FromQuery]int? page)
         {
-            var parkingLots = _parkingLotService.GetAll();
-            return Ok(parkingLots);
+            if (page == null)
+            {
+                var parkingLots = _parkingLotService.GetAll(0);
+                return Ok(parkingLots);
+            }
+            else
+            {
+                var parkingLots = _parkingLotService.GetAll((int)page);
+                return Ok(parkingLots);
+            }
         }
 
         [HttpPost]

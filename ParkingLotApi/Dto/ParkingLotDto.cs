@@ -6,6 +6,10 @@ namespace ParkingLotApi.Dto
 {
     public class ParkingLotDto
     {
+        public ParkingLotDto()
+        {
+        }
+
         public ParkingLotDto(ParkingLotEntity parkingLotEntity)
         {
             if (parkingLotEntity != null)

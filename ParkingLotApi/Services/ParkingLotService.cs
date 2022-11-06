@@ -17,11 +17,23 @@ namespace ParkingLotApi.Services
             _parkingLotContext = parkingLotContext;
         }
 
-        public List<ParkingLotDto> GetAll()
+        public List<ParkingLotDto> GetAll(int page)
         {
-            var parkingLots = _parkingLotContext.ParkingLots.ToList();
-            return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot)).ToList();
-        }
+            int numberOfObjectsPerPage = 15;
+            if (page == 0)
+            {
+                var parkingLots = _parkingLotContext.ParkingLots.ToList();
+                return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot)).ToList();
+            }
+            else
+            {
+                var parkingLots = _parkingLotContext.ParkingLots.ToList();
+                return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot))
+                    .Skip((int)(numberOfObjectsPerPage * page))
+                    .Take(numberOfObjectsPerPage)
+                    .ToList();
+            }
+       }
 
         public async Task<int> Create(ParkingLotDto parkingLotDto)
         {
