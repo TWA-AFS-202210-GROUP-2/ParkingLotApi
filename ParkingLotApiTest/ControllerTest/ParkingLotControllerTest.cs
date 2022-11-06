@@ -155,6 +155,44 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal(15, parkingLotDtos.Count());
         }
 
+        [Fact]
+        public async void Should_return_updated_parkinglot_when_update_given_new_capacity()
+        {
+            // given
+            var httpClient = this.SetUpHttpClient();
+            var newParkingLotDto = new ParkingLotDto()
+            {
+                Name = "ParkingLotA",
+                Capacity = 100,
+                Location = "Zone-A",
+                Status = false,
+            };
+
+            var updateParkingLotDto = new ParkingLotDto()
+            {
+                Name = "ParkingLotA",
+                Capacity = 150,
+                Location = "Zone-A",
+                Status = false,
+            };
+
+            await this.PostNewParkingLot(newParkingLotDto);
+            // when
+            var updateResponse = await this.PutUpdateParkingLot(updateParkingLotDto);
+            var body = await updateResponse.Content.ReadAsStringAsync();
+            var returnParkingLotDto = JsonConvert.DeserializeObject<ParkingLotDto>(body);
+
+            Assert.Equal(150, returnParkingLotDto.Capacity);
+        }
+
+        private async Task<HttpResponseMessage> PutUpdateParkingLot(ParkingLotDto updateParkingLotDto)
+        {
+            var parkingLotJson = JsonConvert.SerializeObject(updateParkingLotDto);
+            var postBody = new StringContent(parkingLotJson, Encoding.UTF8, "application/json");
+
+            return await this.SetUpHttpClient().PutAsync($"api/parkinglots/{updateParkingLotDto.Name}", postBody);
+        }
+
         private async Task<HttpResponseMessage> PostNewParkingLot(ParkingLotDto parkingLotDto)
         {
             var parkingLotJson = JsonConvert.SerializeObject(parkingLotDto);

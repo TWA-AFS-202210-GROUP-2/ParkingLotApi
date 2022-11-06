@@ -58,6 +58,21 @@ namespace ParkingLotApi.Controllers
             }
         }
 
+        [HttpPut("{ParkingLotName}")]
+        public async Task<ActionResult<ParkingLotDto>> Update(ParkingLotDto parkingLotDto)
+        {
+            try
+            {
+                var updateParkinLotDto = await _parkingLotService.UpdateParkingLot(parkingLotDto);
+
+                return updateParkinLotDto;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("ParkingLot Not Exist!");
+            }
+        }
+
         [HttpDelete("{parkingLotName}")]
         public async Task<ActionResult> DeleteByName(string parkingLotName)
         {
