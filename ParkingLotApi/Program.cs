@@ -27,12 +27,13 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ParkingLotContext>();
     using (var context = scope.ServiceProvider.GetService<ParkingLotContext>())
     {
-        //if (dbContext.Database.ProviderName.ToLower().Contains("mysql"))
-        //{ 
-        //    dbContext.Database.Migrate();
-        //}
-        context.Database.EnsureDeleted();
-        context.Database.EnsureCreated();
+        //context.Database.EnsureDeleted();
+        //context.Database.EnsureCreated();
+        if (context.Database.IsRelational())
+        {
+            context.Database.Migrate();
+        }
+
     }
 }
 

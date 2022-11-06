@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ParkingLotApi.Repository;
 
@@ -10,9 +11,10 @@ using ParkingLotApi.Repository;
 namespace ParkingLotApi.Migrations
 {
     [DbContext(typeof(ParkingLotContext))]
-    partial class ParkingLotContextModelSnapshot : ModelSnapshot
+    [Migration("20221105135425_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,6 +75,35 @@ namespace ParkingLotApi.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ParkingLots");
+                });
+
+            modelBuilder.Entity("ParkingLotApi.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("CloseTime")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CreationTime")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsClose")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ParkingLotName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PlateNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ParkingLotApi.Model.OrderEntity", b =>
