@@ -12,6 +12,7 @@ using ParkingLotApi.Dtos;
 using ParkingLotApiTestTest;
 using ParkingLotApi.Services;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using ParkingLotApi.Models;
 
 namespace ParkingLotApiTest.ControllerTest
 {
@@ -154,6 +155,70 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal(150, returnParkingLotDto.Capacity);
         }
 
+        [Fact]
+        public async void Should_new_a_order_when_create_parkinglot_order()
+        {
+            // given
+            var httpClient = this.SetUpHttpClient();
+            var newParkingLotDto = new ParkingLotDto()
+            {
+                Name = "ParkingLotA",
+                Capacity = 100,
+                Location = "Zone-A",
+                Status = false,
+            };
+            await this.PostNewParkingLot(newParkingLotDto);
+
+            var orderDto = new OrderDto()
+            {
+                ParkingLotName = "ParkingLotA",
+                PlateNumber = "001",
+                CreationTime = DateTime.Now.ToString(),
+            };
+
+            // when
+            var response = await this.PostNewOrder(newParkingLotDto.Name, orderDto);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            // then
+            var body = await response.Content.ReadAsStringAsync();
+            var returnObject = JsonConvert.DeserializeObject<int>(body);
+            Assert.NotNull(returnObject);
+        }
+
+        [Fact]
+        public async void Should_change_a_order_when_create_delete_parkinglot_order()
+        {
+            // given
+            var httpClient = this.SetUpHttpClient();
+            var newParkingLotDto = new ParkingLotDto()
+            {
+                Name = "ParkingLotA",
+                Capacity = 100,
+                Location = "Zone-A",
+                Status = false,
+            };
+            await this.PostNewParkingLot(newParkingLotDto);
+
+            var orderDto = new OrderDto()
+            {
+                ParkingLotName = "ParkingLotA",
+                PlateNumber = "001",
+                CreationTime = DateTime.Now.ToString(),
+            };
+            // when
+            var response = await this.PostNewOrder(newParkingLotDto.Name, orderDto);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var body = await response.Content.ReadAsStringAsync();
+            var returnObject = JsonConvert.DeserializeObject<int>(body);
+
+            var putResponse = await this.SetUpHttpClient().PutAsync($"api/parkinglots/{newParkingLotDto.Name}/{returnObject}", null);
+            var putBody = await putResponse.Content.ReadAsStringAsync();
+            var putOrderDto = JsonConvert.DeserializeObject<OrderDto>(putBody);
+            // then
+
+            Assert.Equal(false, putOrderDto.IsOpen);
+        }
+
         private async Task<HttpResponseMessage> PutUpdateParkingLot(ParkingLotDto updateParkingLotDto)
         {
             var parkingLotJson = JsonConvert.SerializeObject(updateParkingLotDto);
@@ -168,6 +233,14 @@ namespace ParkingLotApiTest.ControllerTest
             var postBody = new StringContent(parkingLotJson, Encoding.UTF8, "application/json");
 
             return await this.SetUpHttpClient().PostAsync("api/parkinglots", postBody);
+        }
+
+        private async Task<HttpResponseMessage> PostNewOrder(string name, OrderDto orderDto)
+        {
+            var parkingLotJson = JsonConvert.SerializeObject(orderDto);
+            var postBody = new StringContent(parkingLotJson, Encoding.UTF8, "application/json");
+
+            return await this.SetUpHttpClient().PostAsync($"api/parkinglots/{name}/orders", postBody);
         }
 
         private HttpClient SetUpHttpClient()

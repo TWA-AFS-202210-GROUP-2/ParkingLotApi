@@ -11,8 +11,8 @@ using ParkingLotApi.Repository;
 namespace ParkingLotApi.Migrations
 {
     [DbContext(typeof(ParkingLotContext))]
-    [Migration("20221106131558_Version5")]
-    partial class Version5
+    [Migration("20221106154108_VersionShit")]
+    partial class VersionShit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,37 +21,21 @@ namespace ParkingLotApi.Migrations
                 .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("ParkingLotApi.Models.CarEntity", b =>
-                {
-                    b.Property<string>("PlateId")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("OrderId")
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("ParkingLotEntityId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ParkingLotName")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("PlateId");
-
-                    b.HasIndex("ParkingLotEntityId");
-
-                    b.ToTable("Cars");
-                });
-
             modelBuilder.Entity("ParkingLotApi.Models.OrderEntity", b =>
                 {
-                    b.Property<string>("OrderId")
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<DateTime?>("CloseTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("CloseTime")
+                        .HasColumnType("longtext");
 
-                    b.Property<DateTime?>("CreateTime")
-                        .HasColumnType("datetime(6)");
+                    b.Property<string>("CreationTime")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<int?>("ParkingLotEntityId")
                         .HasColumnType("int");
@@ -60,14 +44,11 @@ namespace ParkingLotApi.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("PlateId")
+                    b.Property<string>("PlateNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("tinyint(1)");
-
-                    b.HasKey("OrderId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ParkingLotEntityId");
 
@@ -98,13 +79,6 @@ namespace ParkingLotApi.Migrations
                     b.ToTable("ParkingLots");
                 });
 
-            modelBuilder.Entity("ParkingLotApi.Models.CarEntity", b =>
-                {
-                    b.HasOne("ParkingLotApi.Models.ParkingLotEntity", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("ParkingLotEntityId");
-                });
-
             modelBuilder.Entity("ParkingLotApi.Models.OrderEntity", b =>
                 {
                     b.HasOne("ParkingLotApi.Models.ParkingLotEntity", null)
@@ -114,8 +88,6 @@ namespace ParkingLotApi.Migrations
 
             modelBuilder.Entity("ParkingLotApi.Models.ParkingLotEntity", b =>
                 {
-                    b.Navigation("Cars");
-
                     b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618

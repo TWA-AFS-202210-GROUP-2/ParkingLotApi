@@ -4,7 +4,7 @@
 
 namespace ParkingLotApi.Migrations
 {
-    public partial class Version6 : Migration
+    public partial class VersionShit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

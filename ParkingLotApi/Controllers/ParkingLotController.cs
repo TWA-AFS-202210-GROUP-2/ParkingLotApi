@@ -58,6 +58,22 @@ namespace ParkingLotApi.Controllers
             }
         }
 
+        [HttpPost("{ParkingLotName}/orders")]
+        public async Task<IActionResult> CreatNewOrder([FromRoute] string parkingLotName, [FromBody] OrderDto orderDto)
+        {
+            var orderId = await _parkingLotService.CreateOrder(parkingLotName, orderDto);
+
+            return Ok(orderId);
+        }
+
+        [HttpPut("{ParkingLotName}/orders/{orderId}")]
+        public async Task<IActionResult> UpdateOrder([FromRoute] string parkingLotName, [FromRoute] int orderId)
+        {
+            var orderDto= await _parkingLotService.ChangeOrder(parkingLotName, orderId);
+
+            return Ok(orderDto);
+        }
+
         [HttpPut("{ParkingLotName}")]
         public async Task<ActionResult<ParkingLotDto>> Update(ParkingLotDto parkingLotDto)
         {

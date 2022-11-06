@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ParkingLotApi.Dtos;
+using ParkingLotApi.Models;
 using ParkingLotApi.Repository;
 using System;
 using System.Collections.Generic;
@@ -92,6 +94,42 @@ namespace ParkingLotApi.Services
             await parkingLotContext.SaveChangesAsync();
 
             return new ParkingLotDto(foundParkingLotEntity);
+        }
+
+        public async Task<int> CreateOrder(string parkingLotName, OrderDto orderDto)
+        {
+            var parkingLot = parkingLotContext.ParkingLots
+                .Include(_ => _.Orders)
+                .FirstOrDefault(_ => _.Name.Equals(parkingLotName));
+            if (parkingLot.Orders.Where(order => order.IsOpen == true).ToList()
+                .Count < parkingLot.Capacity)
+            {
+                orderDto.ParkingLotName = parkingLot.Name;
+                OrderEntity orderEntity = orderDto.ToEntity();
+                parkingLot.Orders.Add(orderEntity);
+                parkingLotContext.ParkingLots.Update(parkingLot);
+                await parkingLotContext.Orders.AddAsync(orderEntity);
+                await parkingLotContext.SaveChangesAsync();
+                return orderEntity.Id;
+            }
+
+            return 0;
+        }
+
+        public async Task<OrderDto> ChangeOrder(string parkingLotName, int orderId)
+        {
+            var parkingLot = parkingLotContext.ParkingLots
+                .Include(_ => _.Orders)
+                .FirstOrDefault(_ => _.Name.Equals(parkingLotName));
+
+            var order = parkingLotContext.Orders.FirstOrDefault(_ => _.Id == orderId);
+            order.IsOpen = false;
+            order.CloseTime = DateTime.Now.ToString();
+
+            parkingLotContext.Orders.Update(order);
+            await parkingLotContext.SaveChangesAsync();
+
+            return new OrderDto(order);
         }
     }
 }
