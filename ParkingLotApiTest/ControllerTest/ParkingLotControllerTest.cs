@@ -11,6 +11,7 @@ using NuGet.Frameworks;
 using ParkingLotApi.Dtos;
 using ParkingLotApiTestTest;
 using ParkingLotApi.Services;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ParkingLotApiTest.ControllerTest
 {
@@ -83,7 +84,7 @@ namespace ParkingLotApiTest.ControllerTest
         public async void Should_delete_parkinglot_when_sold_to_other_successfully()
         {
             // given
-            var httpClient = SetUpHttpClient();
+            var httpClient = this.SetUpHttpClient();
             var newParkingLotDto = new ParkingLotDto()
             {
                 Name = "ParkingLotA",
@@ -96,6 +97,34 @@ namespace ParkingLotApiTest.ControllerTest
             await this.PostNewParkingLot(newParkingLotDto);
             var returnString = await httpClient.DeleteAsync($"api/parkinglots/{"ParkingLotA"}");
             Assert.Equal(HttpStatusCode.NoContent, returnString.StatusCode);
+        }
+
+        [Fact]
+        public async void Should_return_parkingLot_list_by_pages_successfully()
+        {
+            // given
+            var httpClient = this.SetUpHttpClient();
+
+            for (int i = 0; i < 20; i++)
+            {
+                var newParkingLotDto = new ParkingLotDto()
+                {
+                    Name = $"ParkingLot{i + 1}",
+                    Capacity = 100,
+                    Location = "Zone-A",
+                    Status = false,
+                };
+                await this.PostNewParkingLot(newParkingLotDto);
+            }
+
+            // when
+            var response = await httpClient.GetAsync($"api/parkinglots?pageIndex=1");
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var parkingLotDtos = JsonConvert.DeserializeObject<List<ParkingLotDto>>(responseBody);
+
+            // then
+            Assert.Equal(15, parkingLotDtos.Count());
         }
 
         private async Task<HttpResponseMessage> PostNewParkingLot(ParkingLotDto parkingLotDto)

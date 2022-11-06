@@ -1,6 +1,8 @@
-﻿using ParkingLotApi.Dtos;
+﻿using Microsoft.AspNetCore.Mvc;
+using ParkingLotApi.Dtos;
 using ParkingLotApi.Repository;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -70,6 +72,16 @@ namespace ParkingLotApi.Services
         private bool CapacityBelowZero(int capacity)
         {
             return capacity < 0;
+        }
+
+        public List<ParkingLotDto> GetParkingLotsByIndex(int? pageIndex)
+        {
+            var parkingLotsEntity =
+                parkingLotContext.ParkingLots.Skip((pageIndex.Value - 1) * 15)
+                .Take(15).ToList();
+
+            return parkingLotsEntity
+                .Select(parkingLotEntity => new ParkingLotDto(parkingLotEntity)).ToList();
         }
     }
 }

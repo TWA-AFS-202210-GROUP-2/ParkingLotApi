@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ParkingLotApi.Dtos;
 using ParkingLotApi.Services;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ParkingLotApi.Controllers
 {
@@ -21,6 +24,24 @@ namespace ParkingLotApi.Controllers
         {
             var parkingLot = await this._parkingLotService.GetParkingLot(parkingLotName);
             return Ok(parkingLot);
+        }
+
+        [HttpGet]
+        public ActionResult<List<ParkingLotDto>> GetParkingLots([FromQuery] int? pageIndex)
+        {
+            try
+            {
+                if (pageIndex != null && pageIndex >= 0)
+                {
+                    return _parkingLotService.GetParkingLotsByIndex(pageIndex);
+                }
+
+                return _parkingLotService.GetParkingLotsByIndex(pageIndex);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Invalid PageIndex!");
+            }
         }
 
         [HttpPost]
