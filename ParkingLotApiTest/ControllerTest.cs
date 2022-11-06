@@ -86,6 +86,26 @@ namespace ParkingLotApiTest
             Assert.Equal(12, plGetPatch.Capacity);
         }
 
+        public async void Should_new_a_order_when_create_given_parkinglot()
+        {
+            // given : a parking lot
+            var client = GetClient();
+            NewParkingLotData();
+            var pl = new ParkingLotDto(_parkingLotContext.ParkingLots.FirstOrDefault());
+            var postBody = new StringContent(JsonConvert.SerializeObject(pl), Encoding.UTF8, "application/json");
+            var plIdbody = await client.PostAsync("parkinglots", postBody);
+            plIdbody.EnsureSuccessStatusCode();
+            var body = await plIdbody.Content.ReadAsStringAsync();
+            var id = JsonConvert.DeserializeObject<int>(body);
+            var order = pl.Orders.FirstOrDefault().PlateNumber = "BB";
+
+            new StringContent(JsonConvert.SerializeObject(order), Encoding.UTF8, "application/json");
+
+
+            Assert.Equal(pl.Name, _parkingLotContext.ParkingLots.Where(_ => _.Id == id).FirstOrDefault().Name);
+        }
+
+
         public ControllerTest(CustomWebApplicationFactory<Program> factory) : base(factory)
         {
         }

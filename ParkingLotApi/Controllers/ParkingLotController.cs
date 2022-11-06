@@ -59,5 +59,12 @@ namespace ParkingLotApi.Controllers
             var idPatch = _parkingLotService.UpdateCapacityByIdAsync(id, capacity);
             return Ok(idPatch);
         }
+
+        [HttpPost("{id}/orders")]
+        public async Task<IActionResult> CreateOrder([FromRoute] int id, [FromBody] OrderDto orderDto)
+        {
+            var createOrderId = await _parkingLotService.CreateOrder(id, orderDto);
+            return Created(string.Empty, createOrderId);
+        }
     }
 }

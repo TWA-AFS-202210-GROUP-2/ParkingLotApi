@@ -12,5 +12,6 @@ namespace ParkingLotApi.Services
         Task<int> Delete(int id);
         ParkingLotDto GetById(int id);
         Task<int> UpdateCapacityByIdAsync(int id, int capacity);
+        Task<int> CreateOrder(int parkingLotId, OrderDto orderDto);
     }
 }
