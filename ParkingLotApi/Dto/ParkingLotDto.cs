@@ -13,7 +13,7 @@ namespace ParkingLotApi.Dto
                 Name = parkingLotEntity.Name;
                 Capacity = parkingLotEntity.Capacity;
                 Location = parkingLotEntity.Location;
-                Orders = parkingLotEntity.Orders.Select(o => new OrderDto(o)).ToList();
+                Orders = parkingLotEntity.Orders?.Select(o => new OrderDto(o)).ToList();
             }
         }
 

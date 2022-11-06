@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 
 namespace ParkingLotApiTest
 {
-    public class ControllerTest : ControllerTestBase
+    using EFCoreRelationshipsPracticeTest;
+
+    public class ControllerTest : TestBase 
     {
 
         [Fact]
@@ -37,6 +39,10 @@ namespace ParkingLotApiTest
             var body = await response.Content.ReadAsStringAsync();
             var parkinglots = JsonConvert.DeserializeObject<List<ParkingLotEntity>>(body);
             Assert.Equal(2, parkinglots.Count);
+        }
+
+        public ControllerTest(CustomWebApplicationFactory<Program> factory) : base(factory)
+        {
         }
     }
 }
