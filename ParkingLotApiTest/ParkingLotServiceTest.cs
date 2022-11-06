@@ -19,5 +19,15 @@ namespace ParkingLotApiTest
             Assert.Equal(2, parkinglots.Count);
         }
 
+        [Fact]
+        public async void Should_return_3parkinglot_when_get_by_page2_given_18parkinglot()
+        {
+            for (int i = 0; i < 9; i = i + 1)
+            {
+                NewParkingLotData();
+            }
+
+        }
+
     }
 }
