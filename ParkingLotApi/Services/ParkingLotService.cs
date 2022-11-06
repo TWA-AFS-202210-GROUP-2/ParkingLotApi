@@ -21,16 +21,17 @@ namespace ParkingLotApi.Services
         public List<ParkingLotDto> GetAll(int page)
         {
             int numberOfObjectsPerPage = 15;
-            if (page == 0)
+            if (page == -1)
             {
-                var parkingLots = _parkingLotContext.ParkingLots.ToList();
+                var parkingLots = _parkingLotContext.ParkingLots.Include(_ => _.Orders).ToList();
                 return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot)).ToList();
             }
             else
             {
-                var parkingLots = _parkingLotContext.ParkingLots.ToList();
-                return parkingLots.Select(parkingLot => new ParkingLotDto(parkingLot))
-                    .Skip((int)(numberOfObjectsPerPage * page))
+                var parkingLots = _parkingLotContext.ParkingLots.Include(_ => _.Orders).ToList();
+                return parkingLots
+                    .Select(parkingLot => new ParkingLotDto(parkingLot))
+                    .Skip(numberOfObjectsPerPage * page)
                     .Take(numberOfObjectsPerPage)
                     .ToList();
             }

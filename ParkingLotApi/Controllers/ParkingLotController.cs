@@ -22,12 +22,12 @@ namespace ParkingLotApi.Controllers
         {
             if (page == null)
             {
-                var parkingLots = _parkingLotService.GetAll(0);
+                var parkingLots = _parkingLotService.GetAll(-1);
                 return Ok(parkingLots);
             }
             else
             {
-                var parkingLots = _parkingLotService.GetAll((int)page);
+                var parkingLots = _parkingLotService.GetAll((int)page - 1);
                 return Ok(parkingLots);
             }
         }

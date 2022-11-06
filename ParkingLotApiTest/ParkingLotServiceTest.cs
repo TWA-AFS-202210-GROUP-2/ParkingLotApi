@@ -20,13 +20,15 @@ namespace ParkingLotApiTest
         }
 
         [Fact]
-        public async void Should_return_3parkinglot_when_get_by_page2_given_18parkinglot()
+        public async void Should_return_15parkinglot_when_get_by_page1_given_18parkinglot()
         {
             for (int i = 0; i < 9; i = i + 1)
             {
                 NewParkingLotData();
             }
 
+            var list = _parkingLotService.GetAll(0);
+            Assert.Equal(15, list.Count);
         }
 
     }
