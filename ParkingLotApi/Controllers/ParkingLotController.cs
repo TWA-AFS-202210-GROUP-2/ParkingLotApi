@@ -45,5 +45,12 @@ namespace ParkingLotApi.Controllers
             var idReturn = await _parkingLotService.Delete(id);
             return Ok(idReturn);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetParkingLotById([FromRoute] int id)
+        {
+            var parkinglot = _parkingLotService.GetById(id);
+            return Ok(parkinglot);
+        }
     }
 }

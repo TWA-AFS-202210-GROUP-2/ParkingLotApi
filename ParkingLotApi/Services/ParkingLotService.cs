@@ -54,5 +54,13 @@ namespace ParkingLotApi.Services
             await _parkingLotContext.SaveChangesAsync();
             return parkingLot.Id;
         }
+
+        public ParkingLotDto GetById(int id)
+        {
+            var parkingLot = _parkingLotContext.ParkingLots
+                .Include(_ => _.Orders)
+                .FirstOrDefault(_ => _.Id == id);
+            return new ParkingLotDto(parkingLot);
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace ParkingLotApi.Services
         List<ParkingLotDto> GetAll(int page);
         Task<int> Create(ParkingLotDto parkingLotDto);
         Task<int> Delete(int id);
+        ParkingLotDto GetById(int id);
     }
 }
