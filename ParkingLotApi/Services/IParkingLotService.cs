@@ -1,4 +1,5 @@
-﻿using ParkingLotApi.Dto;
+﻿using Microsoft.AspNetCore.Mvc;
+using ParkingLotApi.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,5 +9,6 @@ namespace ParkingLotApi.Services
     {
         List<ParkingLotDto> GetAll(int page);
         Task<int> Create(ParkingLotDto parkingLotDto);
+        Task<int> Delete(int id);
     }
 }

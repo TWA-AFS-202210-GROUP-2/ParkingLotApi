@@ -42,6 +42,17 @@ namespace ParkingLotApiTest
             Assert.Equal(pl.Name, _parkingLotContext.ParkingLots.Where(_ => _.Id == id).FirstOrDefault().Name);
         }
 
+        [Fact]
+        public async void Should_delete_a_parkinglot()
+        {
+            var client = GetClient();
+            NewParkingLotData();
+            var pl = _parkingLotContext.ParkingLots.FirstOrDefault();
+            var plIdbody = await client.DeleteAsync($"parkinglots/{pl.Id}");
+            
+            Assert.Equal(1, _parkingLotContext.ParkingLots.Count());
+        }
+
         public ControllerTest(CustomWebApplicationFactory<Program> factory) : base(factory)
         {
         }

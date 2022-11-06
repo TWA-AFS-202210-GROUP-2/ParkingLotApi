@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ParkingLotApi.Dto;
 using ParkingLotApi.Model;
 using ParkingLotApi.Repository;
@@ -41,6 +42,16 @@ namespace ParkingLotApi.Services
             await _parkingLotContext.ParkingLots.AddAsync(parkingLotEntity);
             await _parkingLotContext.SaveChangesAsync();
             return parkingLotEntity.Id;
+        }
+
+        public async Task<int> Delete(int id)
+        {
+            var parkingLot = _parkingLotContext.ParkingLots
+                .Include(_ => _.Orders)
+                .FirstOrDefault(_ => _.Id == id);
+            _parkingLotContext.ParkingLots.Remove(parkingLot);
+            await _parkingLotContext.SaveChangesAsync();
+            return parkingLot.Id;
         }
     }
 }
