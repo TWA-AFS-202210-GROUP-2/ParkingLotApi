@@ -1,4 +1,6 @@
-﻿namespace ParkingLotApi.Models
+﻿using System.Collections.Generic;
+
+namespace ParkingLotApi.Models
 {
     public class ParkingLotEntity
     {
@@ -11,5 +13,6 @@
         public string Name { get; set; }
         public int Capacity { get; set; }
         public string? Location { get; set; }
+        public List<OrderEntity>? Orders { get; set; }
     }
 }
