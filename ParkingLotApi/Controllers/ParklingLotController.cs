@@ -21,7 +21,7 @@ namespace ParkingLotApi.Controllers
         [HttpPost]
         public async Task<IActionResult> PostOneParkingLot(ParkingLotDto parkingLotDto)
         {
-            var id = parkingLotService.AddParkingLot(parkingLotDto);
+            var id = await parkingLotService.AddParkingLot(parkingLotDto);
 
             return Created("parkinglots",parkingLotDto);
         }

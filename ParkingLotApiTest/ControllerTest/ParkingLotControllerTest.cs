@@ -46,6 +46,7 @@ namespace ParkingLotApiTest.ControllerTest
             var readAsStringAsync = await res.Content.ReadAsStringAsync();
             var deserializeObject = JsonConvert.DeserializeObject<ParkingLotDto>(readAsStringAsync);
             Assert.Equal(parkinglot.Name, deserializeObject.Name);
+            
         }
     }
 }
