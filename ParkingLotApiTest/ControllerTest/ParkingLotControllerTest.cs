@@ -49,37 +49,6 @@ namespace ParkingLotApiTest.ControllerTest
             Assert.Equal(newParkingLotDto.Capacity, addedParkingLot.Capacity);
         }
 
-    /*    [Fact]
-        public async void Should_throw_exception_when_add_same_parkinglot_name()
-        {
-            // given
-            var httpClient = this.SetUpHttpClient();
-
-            await httpClient.DeleteAsync("api/parkinglots");
-
-            var parkingLotDtoOne = new ParkingLotDto()
-            {
-                Name = "ParkingLotA",
-                Capacity = 100,
-                Location = "Zone-A",
-                Status = false,
-            };
-            var parkingLotDtoTwo = new ParkingLotDto()
-            {
-                Name = "ParkingLotA",
-                Capacity = 100,
-                Location = "Zone-A",
-                Status = false,
-            };
-
-            // when
-            await this.PostNewParkingLot(parkingLotDtoOne);
-            await this.PostNewParkingLot(parkingLotDtoOne);
-
-            // then
-            Assert.Throws<ParkingLotNameNotUniqueException>();
-        }*/
-
         [Fact]
         public async void Should_delete_parkinglot_when_sold_to_other_successfully()
         {
