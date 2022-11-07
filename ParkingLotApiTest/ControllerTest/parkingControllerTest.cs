@@ -1,4 +1,4 @@
-﻿namespace EFCoreRelationshipsPracticeTest.ControllerTest
+﻿namespace ParkingLotApi.ControllerTest
 {
     using System.Net.Mime;
     using System.Text;
