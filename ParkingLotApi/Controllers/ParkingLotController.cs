@@ -21,11 +21,14 @@ namespace ParkingLotApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<parkingDto>>> List()
+        public async Task<ActionResult<IEnumerable<parkingDto>>> GetAllParkingLots([FromQuery] int? startPage)
         {
-            var parkingDtos = await this.parkingService.GetAll();
-
-            return Ok(parkingDtos);
+            if (startPage != null)
+            {
+                return Ok(await parkingService.GetByPage((int)startPage));
+            }
+            var parkingLotDtos = await parkingService.GetAll();
+            return Ok(parkingLotDtos);
         }
 
         [HttpGet("{id}")]

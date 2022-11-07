@@ -57,8 +57,6 @@
                     new orderDto()
                     {
                         PlateNumber = "A12345",
-                        CloseTime = "14:00",
-                        CreateTime = "10:00",
                         Status = true,
                     },
                 },
@@ -95,8 +93,6 @@
                     new orderDto()
                     {
                         PlateNumber = "A12345",
-                        CloseTime = "14:00",
-                        CreateTime = "10:00",
                         Status = true,
                     },
                 },
@@ -130,8 +126,6 @@
                     new orderDto()
                     {
                         PlateNumber = "A12345",
-                        CloseTime = "14:00",
-                        CreateTime = "10:00",
                         Status = true,
                     },
                 },
@@ -148,7 +142,6 @@
                     {
                         PlateNumber = "A12345",
                         CloseTime = "14:00",
-                        CreateTime = "9:00",
                         Status = true,
                     },
                 },
@@ -184,8 +177,6 @@
                     new orderDto()
                     {
                         PlateNumber = "A12345",
-                        CloseTime = "14:00",
-                        CreateTime = "10:00",
                         Status = true,
                     },
                 },
@@ -202,7 +193,6 @@
                     {
                         PlateNumber = "A12345",
                         CloseTime = "14:00",
-                        CreateTime = "9:00",
                         Status = true,
                     },
                 },
@@ -219,7 +209,7 @@
 
             var returnparking = JsonConvert.DeserializeObject<parkingDto>(body);
 
-            Assert.Equal("9:00", returnparking.orderDtos[0].CreateTime);
+            Assert.Equal("14:00", returnparking.orderDtos[0].CloseTime);
         }
 
         [Fact]

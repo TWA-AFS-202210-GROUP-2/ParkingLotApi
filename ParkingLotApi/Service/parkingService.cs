@@ -11,6 +11,7 @@ namespace ParkingLotApi.Services
     public class parkingService
     {
         private readonly parkingDbContext parkingDbContext;
+        private int pageSize = 15;
 
         public parkingService(parkingDbContext parkingDbContext)
         {
@@ -23,6 +24,13 @@ namespace ParkingLotApi.Services
 
             return Parkings.Select(parkingEntity => new parkingDto(parkingEntity)).ToList();
 
+        }
+
+        public async Task<List<parkingDto>> GetByPage(int startPage)
+        {
+            var parkingLots = await parkingDbContext.Parkings.ToListAsync();
+            var selectedPage = parkingLots.Select(parkingLot => parkingLot).Skip((startPage - 1) * pageSize).Take(pageSize).ToList();
+            return selectedPage.Select(parkingLot => new parkingDto(parkingLot)).ToList();
         }
 
         public async Task<int> Addparking(parkingDto parkingDto)
