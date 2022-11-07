@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ParkingLotApi.Repository;
+using ParkingLotApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,15 +19,21 @@ builder.Services.AddDbContext<ParkingLotContext>(options =>
     var connectionString = builder.Configuration.GetConnectionString("Default");
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
 });
+builder.Services.AddScoped<IParkingLotService, ParkingLotService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<ParkingLotContext>();
-
-    if (dbContext.Database.ProviderName.ToLower().Contains("mysql"))
+    using (var context = scope.ServiceProvider.GetService<ParkingLotContext>())
     {
-        dbContext.Database.Migrate();
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+        //if (context.Database.IsRelational())
+        //{
+        //    context.Database.Migrate();
+        //}
+
     }
 }
 

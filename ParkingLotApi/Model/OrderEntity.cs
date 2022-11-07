@@ -1,0 +1,25 @@
+﻿using System;
+
+namespace ParkingLotApi.Model
+{
+    public class OrderEntity
+    {
+        public int Id { get; set; }
+
+        public string ParkingLotName { get; set; }
+
+        public string PlateNumber { get; set; }
+
+        public string CreationTime { get; set; } = DateTime.Now.ToString();
+
+        public string? CloseTime { get; set; }
+
+        public bool IsOpen { get; set; } = true;
+    }
+
+    public enum OrderStatus
+    {
+        Open,
+        Closed,
+    }
+}
